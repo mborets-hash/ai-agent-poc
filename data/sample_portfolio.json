@@ -1,0 +1,94 @@
+{
+  "holdings": [
+    {
+      "symbol": "AAPL",
+      "name": "Apple Inc.",
+      "asset_type": "stock",
+      "quantity": 50,
+      "average_cost": 150.00,
+      "current_price": 195.00,
+      "currency": "USD"
+    },
+    {
+      "symbol": "MSFT",
+      "name": "Microsoft Corporation",
+      "asset_type": "stock",
+      "quantity": 30,
+      "average_cost": 280.00,
+      "current_price": 420.00,
+      "currency": "USD"
+    },
+    {
+      "symbol": "GOOGL",
+      "name": "Alphabet Inc.",
+      "asset_type": "stock",
+      "quantity": 20,
+      "average_cost": 120.00,
+      "current_price": 175.00,
+      "currency": "USD"
+    },
+    {
+      "symbol": "AMZN",
+      "name": "Amazon.com Inc.",
+      "asset_type": "stock",
+      "quantity": 25,
+      "average_cost": 130.00,
+      "current_price": 195.00,
+      "currency": "USD"
+    },
+    {
+      "symbol": "NVDA",
+      "name": "NVIDIA Corporation",
+      "asset_type": "stock",
+      "quantity": 40,
+      "average_cost": 450.00,
+      "current_price": 880.00,
+      "currency": "USD"
+    },
+    {
+      "symbol": "META",
+      "name": "Meta Platforms Inc.",
+      "asset_type": "stock",
+      "quantity": 15,
+      "average_cost": 300.00,
+      "current_price": 510.00,
+      "currency": "USD"
+    },
+    {
+      "symbol": "SPY",
+      "name": "SPDR S&P 500 ETF Trust",
+      "asset_type": "etf",
+      "quantity": 100,
+      "average_cost": 420.00,
+      "current_price": 520.00,
+      "currency": "USD"
+    },
+    {
+      "symbol": "QQQ",
+      "name": "Invesco QQQ Trust",
+      "asset_type": "etf",
+      "quantity": 50,
+      "average_cost": 350.00,
+      "current_price": 450.00,
+      "currency": "USD"
+    },
+    {
+      "symbol": "BND",
+      "name": "Vanguard Total Bond Market ETF",
+      "asset_type": "etf",
+      "quantity": 200,
+      "average_cost": 75.00,
+      "current_price": 72.00,
+      "currency": "USD"
+    },
+    {
+      "symbol": "VWO",
+      "name": "Vanguard FTSE Emerging Markets ETF",
+      "asset_type": "etf",
+      "quantity": 80,
+      "average_cost": 42.00,
+      "current_price": 44.00,
+      "currency": "USD"
+    }
+  ]
+}
