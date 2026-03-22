@@ -36,7 +36,7 @@ An AI-powered investment analysis agent built with **LangChain** and **LlamaInde
 
 - Python 3.10+
 - [Ollama](https://ollama.ai/) installed and running locally (`ollama serve`)
-- Models pulled: `ollama pull llama3.1` and `ollama pull nomic-embed-text`
+- Models pulled: `ollama pull llama3.2` and `ollama pull nomic-embed-text`
 
 ### Installation
 
@@ -53,7 +53,7 @@ source .venv/bin/activate
 pip install -e ".[dev]"
 
 # Pull required Ollama models
-ollama pull llama3.1
+ollama pull llama3.2
 ollama pull nomic-embed-text
 
 # Configure environment (optional - defaults work with local Ollama)

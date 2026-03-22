@@ -14,7 +14,7 @@ INDEX_STORAGE_DIR = PROJECT_ROOT / ".index_storage"
 
 # Ollama Configuration
 OLLAMA_BASE_URL: str = os.getenv("OLLAMA_BASE_URL", "http://127.0.0.1:11434")
-OLLAMA_MODEL: str = os.getenv("OLLAMA_MODEL", "llama3.1")
+OLLAMA_MODEL: str = os.getenv("OLLAMA_MODEL", "llama3.2")
 OLLAMA_EMBEDDING_MODEL: str = os.getenv("OLLAMA_EMBEDDING_MODEL", "nomic-embed-text")
 OLLAMA_TEMPERATURE: float = float(os.getenv("OLLAMA_TEMPERATURE", "0.1"))
 OLLAMA_REQUEST_TIMEOUT: float = float(os.getenv("OLLAMA_REQUEST_TIMEOUT", "120.0"))
