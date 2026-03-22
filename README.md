@@ -10,7 +10,7 @@ An AI-powered investment analysis agent built with **LangChain** and **LlamaInde
 │              (main.py - Rich console)                │
 ├─────────────────────────────────────────────────────┤
 │              LangChain Agent Orchestrator             │
-│         (OpenAI Tools Agent + AgentExecutor)          │
+│     (Ollama Tool Calling Agent + AgentExecutor)        │
 ├──────────┬──────────────┬───────────────────────────┤
 │  Portfolio│   News Feed   │      Market Data          │
 │  Analysis │   Analysis    │      Analysis             │
@@ -24,7 +24,7 @@ An AI-powered investment analysis agent built with **LangChain** and **LlamaInde
 
 ### Components
 
-- **LangChain Agent**: Orchestrates the analysis workflow using OpenAI function calling. Decides which tools to use and synthesizes results into recommendations.
+- **LangChain Agent**: Orchestrates the analysis workflow using Ollama tool calling. Decides which tools to use and synthesizes results into recommendations. Runs entirely locally.
 - **LlamaIndex Document Store**: Indexes news articles into a vector store for semantic search and retrieval-augmented generation (RAG).
 - **Portfolio Tool**: Loads holdings from JSON, computes allocation, gain/loss, and performance metrics.
 - **News Feed Tool**: Fetches financial news via RSS (Yahoo Finance, MarketWatch, etc.), indexes with LlamaIndex for semantic querying.
@@ -35,7 +35,8 @@ An AI-powered investment analysis agent built with **LangChain** and **LlamaInde
 ### Prerequisites
 
 - Python 3.10+
-- OpenAI API key
+- [Ollama](https://ollama.ai/) installed and running locally (`ollama serve`)
+- Models pulled: `ollama pull llama3.1` and `ollama pull nomic-embed-text`
 
 ### Installation
 
@@ -51,9 +52,12 @@ source .venv/bin/activate
 # Install the package
 pip install -e ".[dev]"
 
-# Configure environment
+# Pull required Ollama models
+ollama pull llama3.1
+ollama pull nomic-embed-text
+
+# Configure environment (optional - defaults work with local Ollama)
 cp .env.example .env
-# Edit .env and add your OPENAI_API_KEY
 ```
 
 ## Usage
@@ -115,10 +119,11 @@ Configuration is managed via environment variables (`.env` file):
 
 | Variable | Default | Description |
 |---|---|---|
-| `OPENAI_API_KEY` | - | OpenAI API key (required) |
-| `OPENAI_MODEL` | `gpt-4o` | LLM model for the agent |
-| `OPENAI_EMBEDDING_MODEL` | `text-embedding-3-small` | Embedding model for LlamaIndex |
-| `OPENAI_TEMPERATURE` | `0.1` | LLM temperature |
+| `OLLAMA_BASE_URL` | `http://127.0.0.1:11434` | Ollama server URL |
+| `OLLAMA_MODEL` | `llama3.1` | LLM model for the agent |
+| `OLLAMA_EMBEDDING_MODEL` | `nomic-embed-text` | Embedding model for LlamaIndex |
+| `OLLAMA_TEMPERATURE` | `0.1` | LLM temperature |
+| `OLLAMA_REQUEST_TIMEOUT` | `120.0` | Request timeout in seconds |
 | `PORTFOLIO_FILE` | `data/sample_portfolio.json` | Path to portfolio JSON |
 | `NEWS_FEEDS` | Yahoo Finance, MarketWatch | Comma-separated RSS feed URLs |
 | `WATCHLIST` | Top tech + index ETFs | Comma-separated ticker symbols |

@@ -12,11 +12,12 @@ PROJECT_ROOT = Path(__file__).parent.parent.parent
 DATA_DIR = PROJECT_ROOT / "data"
 INDEX_STORAGE_DIR = PROJECT_ROOT / ".index_storage"
 
-# OpenAI Configuration
-OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")
-OPENAI_MODEL: str = os.getenv("OPENAI_MODEL", "gpt-4o")
-OPENAI_EMBEDDING_MODEL: str = os.getenv("OPENAI_EMBEDDING_MODEL", "text-embedding-3-small")
-OPENAI_TEMPERATURE: float = float(os.getenv("OPENAI_TEMPERATURE", "0.1"))
+# Ollama Configuration
+OLLAMA_BASE_URL: str = os.getenv("OLLAMA_BASE_URL", "http://127.0.0.1:11434")
+OLLAMA_MODEL: str = os.getenv("OLLAMA_MODEL", "llama3.1")
+OLLAMA_EMBEDDING_MODEL: str = os.getenv("OLLAMA_EMBEDDING_MODEL", "nomic-embed-text")
+OLLAMA_TEMPERATURE: float = float(os.getenv("OLLAMA_TEMPERATURE", "0.1"))
+OLLAMA_REQUEST_TIMEOUT: float = float(os.getenv("OLLAMA_REQUEST_TIMEOUT", "120.0"))
 
 # Portfolio Configuration
 PORTFOLIO_FILE: str = os.getenv("PORTFOLIO_FILE", str(DATA_DIR / "sample_portfolio.json"))
@@ -55,11 +56,6 @@ VERBOSE_AGENT: bool = os.getenv("VERBOSE_AGENT", "true").lower() == "true"
 def validate_config() -> list[str]:
     """Validate configuration and return list of warnings."""
     warnings: list[str] = []
-
-    if not OPENAI_API_KEY:
-        warnings.append(
-            "OPENAI_API_KEY is not set. The agent will not be able to use LLM capabilities."
-        )
 
     portfolio_path = Path(PORTFOLIO_FILE)
     if not portfolio_path.exists():
