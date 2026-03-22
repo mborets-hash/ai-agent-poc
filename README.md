@@ -120,7 +120,7 @@ Configuration is managed via environment variables (`.env` file):
 | Variable | Default | Description |
 |---|---|---|
 | `OLLAMA_BASE_URL` | `http://127.0.0.1:11434` | Ollama server URL |
-| `OLLAMA_MODEL` | `llama3.1` | LLM model for the agent |
+| `OLLAMA_MODEL` | `llama3.2` | LLM model for the agent |
 | `OLLAMA_EMBEDDING_MODEL` | `nomic-embed-text` | Embedding model for LlamaIndex |
 | `OLLAMA_TEMPERATURE` | `0.1` | LLM temperature |
 | `OLLAMA_REQUEST_TIMEOUT` | `120.0` | Request timeout in seconds |
