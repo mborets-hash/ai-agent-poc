@@ -1,13 +1,13 @@
-"""LangChain-based agent orchestrator for investment analysis."""
+"""LangChain-based agent orchestrator for investment analysis using local Ollama."""
 
 from __future__ import annotations
 
 import logging
 
-from langchain.agents import AgentExecutor, create_openai_tools_agent
+from langchain.agents import AgentExecutor, create_tool_calling_agent
 from langchain_core.messages import HumanMessage
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain_openai import ChatOpenAI
+from langchain_ollama import ChatOllama
 
 from ai_agent import config
 from ai_agent.agent.prompts import (
@@ -21,10 +21,11 @@ logger = logging.getLogger(__name__)
 
 
 class InvestmentAgent:
-    """AI Investment Analyst Agent powered by LangChain.
+    """AI Investment Analyst Agent powered by LangChain + Ollama.
 
     Orchestrates multiple tools (portfolio analysis, news feeds, market data)
     to provide comprehensive investment analysis and recommendations.
+    Uses a local Ollama server for LLM inference.
     """
 
     def __init__(
@@ -33,14 +34,15 @@ class InvestmentAgent:
         temperature: float | None = None,
         verbose: bool | None = None,
     ) -> None:
-        self._model = model or config.OPENAI_MODEL
-        self._temperature = temperature if temperature is not None else config.OPENAI_TEMPERATURE
+        self._model = model or config.OLLAMA_MODEL
+        self._temperature = temperature if temperature is not None else config.OLLAMA_TEMPERATURE
         self._verbose = verbose if verbose is not None else config.VERBOSE_AGENT
 
-        self._llm = ChatOpenAI(
+        self._llm = ChatOllama(
             model=self._model,
+            base_url=config.OLLAMA_BASE_URL,
             temperature=self._temperature,
-            api_key=config.OPENAI_API_KEY,
+            num_predict=4096,
         )
 
         self._tools = [
@@ -58,7 +60,7 @@ class InvestmentAgent:
             ]
         )
 
-        self._agent = create_openai_tools_agent(
+        self._agent = create_tool_calling_agent(
             llm=self._llm,
             tools=self._tools,
             prompt=self._prompt,

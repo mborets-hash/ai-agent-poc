@@ -13,8 +13,8 @@ from llama_index.core import (
     load_index_from_storage,
 )
 from llama_index.core.node_parser import SentenceSplitter
-from llama_index.embeddings.openai import OpenAIEmbedding
-from llama_index.llms.openai import OpenAI
+from llama_index.embeddings.ollama import OllamaEmbedding
+from llama_index.llms.ollama import Ollama
 
 from ai_agent import config
 from ai_agent.models.schemas import NewsArticle
@@ -26,7 +26,8 @@ class DocumentStore:
     """Manages document indexing and retrieval using LlamaIndex.
 
     Uses a vector store index to enable semantic search over financial
-    news articles and research documents.
+    news articles and research documents. Connects to a local Ollama
+    server for LLM inference and embeddings.
     """
 
     def __init__(
@@ -38,14 +39,15 @@ class DocumentStore:
         self._persist_dir = Path(persist_dir) if persist_dir else config.INDEX_STORAGE_DIR
         self._index: VectorStoreIndex | None = None
 
-        Settings.llm = OpenAI(
-            model=llm_model or config.OPENAI_MODEL,
-            api_key=config.OPENAI_API_KEY,
-            temperature=config.OPENAI_TEMPERATURE,
+        Settings.llm = Ollama(
+            model=llm_model or config.OLLAMA_MODEL,
+            base_url=config.OLLAMA_BASE_URL,
+            temperature=config.OLLAMA_TEMPERATURE,
+            request_timeout=config.OLLAMA_REQUEST_TIMEOUT,
         )
-        Settings.embed_model = OpenAIEmbedding(
-            model_name=embedding_model or config.OPENAI_EMBEDDING_MODEL,
-            api_key=config.OPENAI_API_KEY,
+        Settings.embed_model = OllamaEmbedding(
+            model_name=embedding_model or config.OLLAMA_EMBEDDING_MODEL,
+            base_url=config.OLLAMA_BASE_URL,
         )
         Settings.node_parser = SentenceSplitter(chunk_size=512, chunk_overlap=50)
 
