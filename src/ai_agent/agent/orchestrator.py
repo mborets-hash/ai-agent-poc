@@ -4,10 +4,10 @@ from __future__ import annotations
 
 import logging
 
-from langchain.agents import AgentExecutor, create_tool_calling_agent
-from langchain_core.messages import HumanMessage
-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain.agents import create_agent
+from langchain_core.messages import AIMessage, HumanMessage
 from langchain_ollama import ChatOllama
+from langgraph.graph.state import CompiledStateGraph
 
 from ai_agent import config
 from ai_agent.agent.prompts import (
@@ -18,6 +18,15 @@ from ai_agent.agent.prompts import (
 from ai_agent.tools import get_market_data_tool, get_news_feed_tool, get_portfolio_tool
 
 logger = logging.getLogger(__name__)
+
+
+def _extract_response(result: dict) -> str:
+    """Extract the final text response from the agent result."""
+    messages = result.get("messages", [])
+    for msg in reversed(messages):
+        if isinstance(msg, AIMessage) and msg.content:
+            return str(msg.content)
+    return ""
 
 
 class InvestmentAgent:
@@ -51,31 +60,13 @@ class InvestmentAgent:
             get_market_data_tool,
         ]
 
-        self._prompt = ChatPromptTemplate.from_messages(
-            [
-                ("system", SYSTEM_PROMPT),
-                MessagesPlaceholder(variable_name="chat_history", optional=True),
-                ("human", "{input}"),
-                MessagesPlaceholder(variable_name="agent_scratchpad"),
-            ]
-        )
-
-        self._agent = create_tool_calling_agent(
-            llm=self._llm,
+        self._agent: CompiledStateGraph = create_agent(
+            model=self._llm,
             tools=self._tools,
-            prompt=self._prompt,
+            system_prompt=SYSTEM_PROMPT,
         )
 
-        self._executor = AgentExecutor(
-            agent=self._agent,
-            tools=self._tools,
-            verbose=self._verbose,
-            max_iterations=config.MAX_AGENT_ITERATIONS,
-            handle_parsing_errors=True,
-            return_intermediate_steps=True,
-        )
-
-        self._chat_history: list[HumanMessage] = []
+        self._chat_history: list[HumanMessage | AIMessage] = []
 
     def run_full_analysis(self, additional_instructions: str = "") -> str:
         """Run a comprehensive portfolio analysis.
@@ -90,15 +81,9 @@ class InvestmentAgent:
             Complete analysis report as a string.
         """
         prompt = ANALYSIS_PROMPT_TEMPLATE.format(additional_instructions=additional_instructions)
-
-        result = self._executor.invoke(
-            {
-                "input": prompt,
-                "chat_history": self._chat_history,
-            }
-        )
-
-        return str(result["output"])
+        messages = list(self._chat_history) + [HumanMessage(content=prompt)]
+        result = self._agent.invoke({"messages": messages})
+        return _extract_response(result)
 
     def query(self, question: str) -> str:
         """Ask a specific investment question.
@@ -110,15 +95,9 @@ class InvestmentAgent:
             Agent's data-driven response.
         """
         prompt = QUERY_PROMPT_TEMPLATE.format(query=question)
-
-        result = self._executor.invoke(
-            {
-                "input": prompt,
-                "chat_history": self._chat_history,
-            }
-        )
-
-        return str(result["output"])
+        messages = list(self._chat_history) + [HumanMessage(content=prompt)]
+        result = self._agent.invoke({"messages": messages})
+        return _extract_response(result)
 
     def chat(self, message: str) -> str:
         """Interactive chat with the agent, maintaining conversation history.
@@ -129,16 +108,11 @@ class InvestmentAgent:
         Returns:
             Agent's response.
         """
-        result = self._executor.invoke(
-            {
-                "input": message,
-                "chat_history": self._chat_history,
-            }
-        )
-
         self._chat_history.append(HumanMessage(content=message))
-
-        return str(result["output"])
+        result = self._agent.invoke({"messages": list(self._chat_history)})
+        response = _extract_response(result)
+        self._chat_history.append(AIMessage(content=response))
+        return response
 
     def clear_history(self) -> None:
         """Clear conversation history."""

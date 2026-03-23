@@ -34,7 +34,7 @@ An AI-powered investment analysis agent built with **LangChain** and **LlamaInde
 
 ### Prerequisites
 
-- Python 3.10+
+- Python 3.12+
 - [Ollama](https://ollama.ai/) installed and running locally (`ollama serve`)
 - Models pulled: `ollama pull llama3.2` and `ollama pull nomic-embed-text`
 

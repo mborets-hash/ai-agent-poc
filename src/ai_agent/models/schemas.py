@@ -1,12 +1,12 @@
 """Pydantic data models for portfolio, news, and market data."""
 
 from datetime import datetime
-from enum import Enum
+from enum import StrEnum
 
 from pydantic import BaseModel, Field
 
 
-class AssetType(str, Enum):
+class AssetType(StrEnum):
     """Types of financial assets."""
 
     STOCK = "stock"
@@ -17,7 +17,7 @@ class AssetType(str, Enum):
     OTHER = "other"
 
 
-class RecommendationAction(str, Enum):
+class RecommendationAction(StrEnum):
     """Possible recommendation actions."""
 
     BUY = "buy"
