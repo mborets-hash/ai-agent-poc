@@ -7,12 +7,12 @@ name = "ai-agent-poc"
 version = "0.1.0"
 description = "AI Agent for investment portfolio analysis and recommendations using LlamaIndex and LangChain"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.12"
 license = {text = "MIT"}
 dependencies = [
-    "langchain>=0.3.0",
+    "langchain>=1.2.0",
     "langchain-ollama>=0.3.0",
-    "langchain-community>=0.3.0",
+    "langgraph>=1.0.0",
     "llama-index>=0.11.0",
     "llama-index-llms-ollama>=0.5.0",
     "llama-index-embeddings-ollama>=0.5.0",
@@ -38,13 +38,13 @@ ai-agent = "ai_agent.main:main"
 where = ["src"]
 
 [tool.ruff]
-target-version = "py310"
+target-version = "py312"
 line-length = 100
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "N", "W", "UP"]
 
 [tool.mypy]
-python_version = "3.10"
+python_version = "3.12"
 warn_return_any = true
 warn_unused_configs = true
